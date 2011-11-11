@@ -229,7 +229,7 @@ $.fn.jCarouselLite = function(o) {
     }, o || {});
 
     return this.each(function() {                           // Returns the element collection. Chainable.
-
+        var _that = this;
         var running = false, animCss=o.vertical?"top":"left", sizeCss=o.vertical?"height":"width";
         var div = $(this), ul = $("ul", div), tLi = $("li", ul), tl = tLi.size(), v = o.visible;
 
@@ -255,16 +255,22 @@ $.fn.jCarouselLite = function(o) {
 
         div.css(sizeCss, divSize+"px");                     // Width of the DIV. length of visible images
 
-        $(this).data('visibleElements', vis());
-
+        $(_that).data('visibleElements', vis());
+        $(this).bind('goNext', function() {
+          return go(curr+o.scroll);
+        });
+        $(this).bind('goPrev', function() {
+          return go(curr+o.scroll);
+        });
+          
         if(o.btnPrev)
             $(o.btnPrev).click(function() {
-                return go(curr-o.scroll);
+              $(this).trigger('goPrev');
             });
 
         if(o.btnNext)
             $(o.btnNext).click(function() {
-                return go(curr+o.scroll);
+              $(this).trigger('goNext');
             });
 
         if(o.btnGo)
@@ -316,8 +322,7 @@ $.fn.jCarouselLite = function(o) {
                     function() {
                         if(o.afterEnd)
                             o.afterEnd.call(this, vis());
-                        $(this).data('visibleElements', vis());
-
+                        $(_that).data('visibleElements', vis());
                         running = false;
                     }
                 );
