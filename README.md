@@ -47,6 +47,13 @@ navigation buttons as options.
 
 That's it, you would have now converted your raw div, into a magnificient carousel.
 
+#### Mods by 2rye.com
+If you need to know the visible elements at any time, you can query the original dom element's data hash and get that information.
+
+     $('.carousel').jCarouselLite();
+     var vis = $('.carousel').data('visibleElements');
+     >>  vis = [ <li>, <li>, <li> ];
+
 ### options
 There are quite a few other options that you can use to customize it though.
 Each will be explained with an example below.
