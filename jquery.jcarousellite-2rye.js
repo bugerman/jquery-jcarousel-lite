@@ -272,11 +272,19 @@
 
       $(_that).data('visibleElements', vis());
       $(_that).data('position', {first: 0, last:o.visible-1});
+      $(this).bind('goNextOne', function() {
+        return go(curr+1);
+      });
+      $(this).bind('goPrevOne', function() {
+        return go(curr-1);
+      });
       $(this).bind('goNext', function() {
-        return go(curr+o.scroll);
+        var nxt = curr+o.scroll
+        return go((nxt > itemLength-v) ? itemLength - v: nxt);
       });
       $(this).bind('goPrev', function() {
-        return go(curr-o.scroll);
+        var prev = curr-o.scroll;
+        return go((prev < 0) ? 0 : prev);
       });
       
       if(o.btnPrev) {
@@ -354,9 +362,9 @@
           // Disable buttons when the carousel reaches the last/first, and enable when not
           if(!o.circular) {
             $(o.btnPrev + "," + o.btnNext).removeClass("disabled");
-            $( (curr-o.scroll<0 && o.btnPrev)
+            $( (curr-1<0 && o.btnPrev)
                ||
-               (curr+o.scroll > itemLength-v && o.btnNext)
+               (curr+1 > itemLength-v && o.btnNext)
                ||
                []
              ).addClass("disabled");
