@@ -272,6 +272,27 @@
 
       $(_that).data('visibleElements', vis());
       $(_that).data('position', {first: 0, last:o.visible-1});
+
+      /** for forward/backward, event should have n in it's params to
+          indicate how many steps to go forward or backward **/
+      $(this).bind('goBackward', function(ev) {
+        if(ev.n) {
+          var prev = curr-ev.n;
+          return go((prev < 0) ? 0 : prev);
+        }
+      });
+      $(this).bind('goForward', function(ev) { 
+        if (ev.n) {
+          var nxt = curr+ev.n;
+          return go((nxt > itemLength-v) ? itemLength - v: nxt);
+        }
+      });
+      $(this).bind('goAbsolute', function(ev) {
+        if (ev.n) {
+          return go((ev.n > itemLength-v) ? itemLength - v: ev.n);
+        }
+      });
+
       $(this).bind('goNextOne', function() {
         return go(curr+1);
       });
@@ -279,7 +300,7 @@
         return go(curr-1);
       });
       $(this).bind('goNext', function() {
-        var nxt = curr+o.scroll
+        var nxt = curr+o.scroll;
         return go((nxt > itemLength-v) ? itemLength - v: nxt);
       });
       $(this).bind('goPrev', function() {
